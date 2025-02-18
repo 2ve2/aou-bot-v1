@@ -143,8 +143,8 @@ async def call_main(call):
         await bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text=
                             "- احصائيات البوت :\n"
                             f"• عدد مستخدمين البوت : {len(users.keys())}\n"
-                            f"• عدد الكتب المنشوره : {"1"}\n"
-                            f"• عدد السلايدات المنشوره : {"1"}",
+                            f"• عدد الكتب المنشوره : 1\n"
+                            f"• عدد السلايدات المنشوره : 1",
                             reply_markup=markup_gen({"الرجوع":"back"}))
     elif call.data == 'back':
         await bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text=start_msg,reply_markup=markup_start())
