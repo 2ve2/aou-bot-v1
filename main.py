@@ -158,15 +158,21 @@ async def main_start(message):
 @bot.message_handler(commands=['add'],chat_types=['private'])
 async def add_admin(message):
     if message.chat.id == OWNER:
-        admin.set(f"{message.text.split("/add ")[1]}",True)
+        admin.set(f"{message.text.split('/add ')[1]}",True)
         await bot.reply_to(message,'- تم اضافته الى قائمة الادمنيه .')
 
 # delete admin
 @bot.message_handler(commands=['delete'],chat_types=['private'])
 async def delete_admin(message):
     if message.chat.id == OWNER:
-        admin.delete(f"{message.text.split("/delete ")[1]}")
+        admin.delete(f"{message.text.split('/delete ')[1]}")
         await bot.reply_to(message,'- تم حذفه من قائمة الادمنيه .')
+
+# get users number
+@bot.message_handler(commands=['users'],chat_types=['private'])
+async def delete_admin(message):
+    if message.chat.id == OWNER:
+        await bot.reply_to(message,f'- المشتركين : {len(users.keys())}')
 
 # get books and slides 
 @bot.message_handler(func=lambda message:message.text in ["الكتب","السلايدات"])
