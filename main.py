@@ -5,10 +5,10 @@ from kvsqlite.sync import Client
 from datetime import datetime
 # from pdf2image import convert_from_bytes
 
-users = Client('./db/users.sqlite')
-admin = Client('./db/admin.sqlite')
-req = Client('./db/req.sqlite')
-req2 = Client('./db/req2.sqlite')
+users = Client('users.sqlite')
+admin = Client('admin.sqlite')
+req = Client('req.sqlite')
+req2 = Client('req2.sqlite')
 
 
 time = datetime.now()
@@ -173,7 +173,8 @@ async def delete_admin(message):
 @bot.message_handler(commands=['info'],chat_types=['private'])
 async def delete_admin(message):
     if message.chat.id == OWNER:
-        await bot.send_document(message.chat.id,open('./db/users.sqlite','r'))
+        with open('users.sqlite','rb') as file:
+            await bot.send_document(message.chat.id,file)
         await bot.send_document(message.chat.id,open('./other/info.json','r'))
         await bot.send_message(message.chat.id,f'- عدد المشتركين : {len(users.keys())}')
 
@@ -344,7 +345,6 @@ async def main_questions_aou(message):
 async def call_questions_aou(message):
     try:
         values = [item.get("file_id") or item.get("answer") for item in get_info_aou()["questions"] if item.get("title") == message.text][0]
-        print(values)
         if values.startswith("BQA"):
             await bot.send_document(message.chat.id,values,message.message_id)
         else:
