@@ -64,17 +64,17 @@ def markup_celender():
     keyboard.add(
         types.InlineKeyboardButton(
             text=f"التقويم الاكاديمي",
-            web_app=types.WebAppInfo(f"https://www.arabou.edu.sa/ar/students/pages/academic-calendar.aspx"),
+            url="https://www.arabou.edu.sa/ar/students/pages/academic-calendar.aspx"
     ))
     keyboard.add(
     types.InlineKeyboardButton(
         text=f"جدول الاختبارات النصفية",
-        web_app=types.WebAppInfo(f"https://www.arabou.edu.sa/ar/students/examinations/Pages/MTA-Exam.aspx"),
+        url="https://www.arabou.edu.sa/ar/students/examinations/Pages/MTA-Exam.aspx"
     ))
     keyboard.add(
     types.InlineKeyboardButton(
         text=f"جدول الاختبارات النهائية",
-        web_app=types.WebAppInfo(f"https://www.arabou.edu.sa/ar/students/examinations/Pages/Final-Exam.aspx"),
+        url="https://www.arabou.edu.sa/ar/students/examinations/Pages/Final-Exam.aspx"
     ))
 
     return keyboard
@@ -168,11 +168,14 @@ async def delete_admin(message):
         admin.delete(f"{message.text.split('/delete ')[1]}")
         await bot.reply_to(message,'- تم حذفه من قائمة الادمنيه .')
 
-# get users number
-@bot.message_handler(commands=['users'],chat_types=['private'])
+
+# get all info
+@bot.message_handler(commands=['info'],chat_types=['private'])
 async def delete_admin(message):
     if message.chat.id == OWNER:
-        await bot.reply_to(message,f'- المشتركين : {len(users.keys())}')
+        await bot.send_document(message.chat.id,open('./db/users.sqlite','r'))
+        await bot.send_document(message.chat.id,open('./other/info.json','r'))
+        await bot.send_message(message.chat.id,f'- عدد المشتركين : {len(users.keys())}')
 
 # get books and slides 
 @bot.message_handler(func=lambda message:message.text in ["الكتب","السلايدات"])
