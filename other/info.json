@@ -1,0 +1,63 @@
+{
+    "books": [],
+    "slides": [],
+    "plan": [
+        {
+            "title": "الأنظمة",
+            "file_id": "BQACAgQAAxkBAAIFhGe88JzNM5v4QdVlNlssOjwDwiMuAALTFQACIXHoUQJwFzQhCkhMNgQ"
+        },
+        {
+            "title": "الحوسبة مع الأعمال",
+            "file_id": "BQACAgQAAxkBAAIFhWe88JzHc_W5O4NzfYEugM1zrMeaAALUFQACIXHoUUe2BF_BNlYYNgQ"
+        },
+        {
+            "title": "الشبكات و أمن المعلومات",
+            "file_id": "BQACAgQAAxkBAAIFhme88Jx9jOeD8IRaprOeXQ4RZjQ8AALXFQACIXHoUe8E6BHyFj0AATYE"
+        },
+        {
+            "title": "المحاسبة بالانجليزي",
+            "file_id": "BQACAgQAAxkBAAIFiGe88Jzrn5HAFTS018O2iROEjoMNAALSFQACIXHoURhHF3psPvW1NgQ"
+        },
+        {
+            "title": "المحاسبة بالعربي",
+            "file_id": "BQACAgQAAxkBAAIFiWe88Jxi_mqsda3ykL9Y9z-MPT7WAALWFQACIXHoUVDIh7GXYcMENgQ"
+        },
+        {
+            "title": "تسويق",
+            "file_id": "BQACAgQAAxkBAAIFime88Jx1Hr6eRilvKiy8kQ801By-AALVFQACIXHoUb1vPReJIrCwNgQ"
+        },
+        {
+            "title": "تطوير الويب",
+            "file_id": "BQACAgQAAxkBAAIFi2e88JxrMfqFyls9_ixpDr-cWSm1AALYFQACIXHoUbd7AR4eaS3KNgQ"
+        },
+        {
+            "title": "تقنية المعلومات",
+            "file_id": "BQACAgQAAxkBAAIFjGe88JzihDxxaeppyiyPVhrNRqMYAALaFQACIXHoUQVCf8RUWJ-VNgQ"
+        },
+        {
+            "title": "علوم الحاسب",
+            "file_id": "BQACAgQAAxkBAAIFjWe88JyQWzSfL2y13KvhgE9fTmCWAALZFQACIXHoUSgdP4YCfyBbNgQ"
+        },
+        {
+            "title": "اللغة الانجليزية و آدابها",
+            "file_id": "BQACAgQAAxkBAAIFr2e88WN0djJCCMabQo_fs6F55644AALbFQACIXHoUR4Ys59tqjGHNgQ"
+        }
+    ],
+    "questions": [
+        {
+            "title": "طلبات الانتقال والانسحاب والتأجيل",
+            "file_id": "BQACAgQAAxkBAAIFuGe88dRAGDX1-4MD9ZyFM2miorRZAALcFQACIXHoUewPTZjFXmcDNgQ"
+        }
+    ],
+    "start_msg": [
+        "👋 مرحبا بك في بوت المساعد الطلابي للجامعة العربية المفتوحة !\n\n",
+        "أنا هنا لمساعدتك في جميع احتياجاتك الجامعية .\n\n",
+        "الخدمات المتوفره بالبوت :\n\n",
+        "• الكتب والسلايدات الدراسية\n",
+        "• ايميلات الجامعة\n",
+        "• مواعيد الدراسة\n",
+        "• الخطط الدراسية لجميع التخصصات\n",
+        "• اسئلة شائعة مع اجابات\n\n",
+        "نتمنى من الجميع نشر البوت لإفادة الطلاب الآخرين وشكرا ."
+    ]
+}

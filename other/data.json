@@ -1,0 +1,241 @@
+{
+    "branches": [
+      {
+        "branch_name": "الرياض",
+        "departments": [
+          {
+            "department_name": "القبول و التسجيل",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "ar@arabou.edu.sa"},
+                {"name": "حسن محمد العمودي", "email": "h.alamody@arabou.edu.sa"},
+                {"name": "بدر الشهري", "email": "b.alshehri@arabou.edu.sa"},
+                {"name": "هيا الخشلان", "email": "h.alkashlan@arabou.edu.sa"},
+                {"name": "عهود الحواش", "email": "a.alhawsh@arabou.edu.sa"},
+                {"name": "ريما رضوان", "email": "abeerm@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "شؤون الطلبة والخريجين",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "std.affairs@arabou.edu.as"},
+                {"name": "بندر الدويش", "email": "b.aldawish@arabou.edu.sa"},
+                {"name": "عفاف العنزي", "email": "a.alanazi@arabou.edu.sa"},
+                {"name": "هيا البيشي", "email": "h.albeeshi@arabou.edu.sa"},
+                {"name": "بدور القحطاني", "email": "b.alqahtani@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الشؤون المالية",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "وائل أبو رمضان", "email": "wael@arabou.edu.sa"},
+                {"name": "عبدالله المطيري", "email": "a.almuteri@arabou.edu.sa"},
+                {"name": "ندى عبدالقادر", "email": "nadafaiz@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الدعم الفني",
+            "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "أحمد النمراوي", "email": "a.nemrawi@arabou.edu.sa"},
+                {"name": "وليد الفعيم", "email": "w.alfaeem@arabou.edu.sa"},
+                {"name": "أريج السعيد", "email": "a.saeed@arabou.edu.sa"},
+                {"name": "سارة أحمد", "email": "s.ahmed@arabou.edu.sa"}
+            ]
+          }
+        ]
+      },
+      {
+        "branch_name": "جدة",
+        "departments": [
+          {
+            "department_name": "القبول و التسجيل",
+            "emails": [
+                {"name": "أمير العجمي", "email": "aalagami@arabou.edu.sa"},
+                {"name": "فهد الروقي", "email": "f.alroge@arabou.edu.sa"},
+                {"name": "يحيى الجيزاني", "email": "y.aljizani@arabou.edu.sa"},
+                {"name": "مرام الجاسر", "email": "mjasser@arabou.edu.sa"},
+                {"name": "عبير مدني", "email": "abeerm@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "شؤون الطلبة والخريجين",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "jeddah.stdaffairs@arabou.edu.sa"},
+                {"name": "سعد القحطاني", "email": "Std.affairs@arabou.edu.sa"},
+                {"name": "محمد المطرفي", "email": "m.almatrafi@arabou.edu.sa"},
+                {"name": "آمال دبيس", "email": "a.dubais@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الشؤون المالية",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "رامي الفايد", "email": "r.alfaydi@arabou.edu.sa"},
+                {"name": "عائشة الرفاعي", "email": "a.alrefaei@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الدعم الفني",
+            "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "رائد المحمادي", "email": "r.almehmadi@arabou.edu.sa"},
+                {"name": "سلطان الجفري", "email": "s.aljefri@arabou.edu.sa"},
+                {"name": "خالد السهلي", "email": "k.alsahli@arabou.edu.sa"},
+                {"name": "شذى نجيم", "email": "s.nejaim@arabou.edu.sa"},
+                {"name": "سماح الحربي", "email": "samah.alharbi@arabou.edu.sa"}
+            ]
+          }
+        ]
+      },
+      {
+        "branch_name": "المدينة المنورة",
+        "departments": [
+          {
+            "department_name": "القبول و التسجيل",
+            "emails": [
+                {"name": "عمر العقيبي", "email": "o.aloqaibi@arabou.edu.sa"},
+                {"name": "هيثم طرابيشي", "email": "h.tarabishi@arabou.edu.sa"},
+                {"name": "زياد بوشناق", "email": "z.bushnaq@arabou.edu.sa"},
+                {"name": "غزل حجاج", "email": "g.mutwakel@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "شؤون الطلبة والخريجين",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "std.affairs@arabou.edu.as"},
+                {"name": "عبدالعزيز تركستاني", "email": "a.turkistani@arabou.edu.sa"},
+                {"name": "آلاء الشيخ", "email": "a.alsheikh@arabou.edu.sa"},
+                {"name": "عبير التميمي", "email": "a.altamimi@arabou.edu.sa"},
+                {"name": "آلاء حمودة", "email": "a.hammoudah@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الشؤون المالية",
+            "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "عبدالرحيم مدثر", "email": "a.hassan@arabou.edu.sa"}
+            ]
+          },
+          {
+            "department_name": "الدعم الفني",
+            "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "محمد سامي", "email": "m.samy@arabou.edu.sa"},
+                {"name": "وائل رشدي", "email": "w.roshdi@arabou.edu.sa"},
+                {"name": "منيرة السنيدي", "email": "m.alsunidi@arabou.edu.sa"}
+            ]
+          }
+        ]
+      },
+      {
+        "branch_name": "الدمام",
+        "departments": [
+            {
+              "department_name": "القبول و التسجيل",
+              "emails": [
+                {"name": "عبدالمحسن الشمري", "email": "a.alshammari@arabou.edu.sa"},
+                {"name": "علي الغانم", "email": "ali.ghanem@arabou.edu.sa"},
+                {"name": "فرح العلي", "email": "f.alali@arabou.edu.sa"},
+                {"name": "زينب أبو جبارة", "email": "z.bojubarah@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "شؤون الطلبة والخريجين",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "std.affairs@arabou.edu.as"},
+                {"name": "محمد العاشور", "email": "m_ashour@arabou.edu.sa"},
+                {"name": "أحلام الذيباني", "email": "a.althbeani@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "الشؤون المالية",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "عبدالرحيم مدثر", "email": "a.hassan@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "الدعم الفني",
+              "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "أحمد البغدادي", "email": "aboghdady@arabou.edu.sa"},
+                {"name": "محمد البيلي", "email": "mbiali@arabou.edu.sa"},
+                {"name": "شمس الدين محمد", "email": "shams@arabou.edu.sa"},
+                {"name": "سارة الجلود", "email": "s.aljaloud@arabou.edu.sa"}
+            ]
+            }
+        ]
+      },
+      {
+        "branch_name": "حائل",
+        "departments": [
+            {
+              "department_name": "القبول و التسجيل",
+              "emails": [
+                {"name": "رائد الملق", "email": "r.almalaq@arabou.edu.sa"},
+                {"name": "منى الجبرين", "email": "maljbreen@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "شؤون الطلبة والخريجين",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "std.affairs@arabou.edu.as"},
+                {"name": "محمد المطير", "email": "m.almutair@arabou.edu.sa"},
+                {"name": "منى الجبرين", "email": "maljbreen@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "الشؤون المالية",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "بندر العبيد", "email": "bobaid@arabou.edu.sa"},
+                {"name": "منى الجبرين", "email": "maljbreen@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "الدعم الفني",
+              "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "نوف الخشرم", "email": "n.alkhashram@arabou.edu.sa"}
+            ]
+            }
+        ]
+      },
+      {
+        "branch_name": "الاحساء",
+        "departments": [
+            {
+              "department_name": "القبول و التسجيل",
+              "emails": [
+                {"name": "أنس التركي", "email": "a.altorky@arabou.edu.sa"},
+                {"name": "آلاء العويسي", "email": "a.alowaisi@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "شؤون الطلبة والخريجين",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "std.affairs@arabou.edu.as"},
+                {"name": "يوسف الصايغ", "email": "ysaeigh@arabou.edu.sa"},
+                {"name": "عفاف الدريس", "email": "afaf.edrees@arabou.edu.sa"}
+            ]
+            },
+            {
+              "department_name": "الشؤون المالية",
+              "emails": [
+                {"name": "الايميل العام للقسم", "email": "finance@arabou.edu.sa"},
+                {"name": "محمد التاجر", "email": "maltajer@arabou.edu.sa"},
+                {"name": "عفاف الدريس", "email": "afaf.edrees@arabou.edu.sa"}
+              ]
+            },
+            {
+              "department_name": "الدعم الفني",
+              "emails": [
+                {"name": "الايميل العام", "email": "LMS@arabou.edu.sa"},
+                {"name": "وجود المطيري", "email": "w.almutairi@arabou.edu.sa"}
+              ]
+            }
+        ]
+      }
+    ]
+  }
