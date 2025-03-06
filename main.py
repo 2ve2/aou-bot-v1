@@ -6,9 +6,9 @@ from datetime import datetime
 # from pdf2image import convert_from_bytes
 
 users = Client('./db/users.sqlite')
-admin = Client('.db/admin.sqlite')
+admin = Client('./db/admin.sqlite')
 req = Client('./db/req.sqlite')
-req2 = Client('.db/req2.sqlite')
+req2 = Client('./db/req2.sqlite')
 
 
 time = datetime.now()
