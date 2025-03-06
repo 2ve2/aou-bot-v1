@@ -5,10 +5,10 @@ from kvsqlite.sync import Client
 from datetime import datetime
 # from pdf2image import convert_from_bytes
 
-users = Client('users.sqlite')
-admin = Client('admin.sqlite')
-req = Client('req.sqlite')
-req2 = Client('req2.sqlite')
+users = Client('./db/users.sqlite')
+admin = Client('.db/admin.sqlite')
+req = Client('./db/req.sqlite')
+req2 = Client('.db/req2.sqlite')
 
 
 time = datetime.now()
