@@ -27,37 +27,6 @@ def markup_gen(loop):
                 ))
     return keyboard
 
-# markup start
-def markup_start(chat_id):
-    keyboard = types.InlineKeyboardMarkup(row_width=7)
-    keyboard.add(
-            types.InlineKeyboardButton(
-                text=f"قناة البوت",
-                url=f"https://t.me/aouksaa",
-            ),        
-            types.InlineKeyboardButton(
-            text=f"شارك البوت",
-            url="Https://t.me/share?url=t.me/aouksabot"
-        ))
-    keyboard.add(
-            types.InlineKeyboardButton(
-                text=f"اقتراح - استفسار",
-                url=f"tg://user?id=5029420526",
-            ))
-    if admin.exists(f"{chat_id}") or OWNER == chat_id:
-        keyboard.add(
-            types.InlineKeyboardButton(
-                text=f"الاعدادات",
-                callback_data=f"settings",
-            ))
-        return keyboard
-    else:
-        if users.exists(f"{chat_id}"):
-            return keyboard
-        else:
-            users.set(f'{chat_id}',{'time':f"{time.year}-{time.month}-{time.day}"})
-            return keyboard
-
 # markup celendar
 def markup_celender():
     keyboard = types.InlineKeyboardMarkup(row_width=7)
@@ -137,6 +106,19 @@ def add_books_or_slides(title,file_id,value,name):
         json.dump(data, file, indent=4, ensure_ascii=False)
     return True
 
+# function to add userid and username
+def add_users(id_,username):
+    with open('./other/users.json', 'r+', encoding='utf-8') as file:
+        data = json.load(file)
+        info = {
+            'id': id_,
+            'username': f'{username}',
+        }
+        data[f'users'].append(info)
+        file.seek(0)
+        json.dump(data, file, indent=4, ensure_ascii=False)
+    return True
+
 # function to get info books , slides , etc
 def get_info_aou():
         with open('./other/info.json', 'r', encoding='utf-8') as file:
@@ -147,11 +129,48 @@ def get_info_emails():
     with open('./other/data.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
+# function get info from data.json
+def get_info_users():
+    with open('./other/users.json', 'r', encoding='utf-8') as file:
+        return json.load(file)
+
+
+
+# markup start
+def markup_start(chat_id,username):
+    keyboard = types.InlineKeyboardMarkup(row_width=7)
+    keyboard.add(
+            types.InlineKeyboardButton(
+                text=f"قناة البوت",
+                url=f"https://t.me/aouksaa",
+            ),        
+            types.InlineKeyboardButton(
+            text=f"شارك البوت",
+            url="Https://t.me/share?url=t.me/aouksabot"
+        ))
+    keyboard.add(
+            types.InlineKeyboardButton(
+                text=f"اقتراح - استفسار",
+                url=f"tg://user?id=5029420526",
+            ))
+    if admin.exists(f"{chat_id}") or OWNER == chat_id:
+        keyboard.add(
+            types.InlineKeyboardButton(
+                text=f"الاعدادات",
+                callback_data=f"settings",
+            ))
+        return keyboard
+    else:
+        if chat_id in [item['id'] for item in get_info_users()['users']]:
+            return keyboard
+        else:
+            if add_users(chat_id,username):
+                return keyboard
 
 # start message
 @bot.message_handler(commands=['start'],content_types=['text'],chat_types=['private'])
 async def main_start(message):
-    await bot.send_message(message.chat.id,''.join(get_info_aou()['start_msg']),reply_to_message_id=message.message_id,reply_markup=markup_start(message.chat.id))
+    await bot.send_message(message.chat.id,''.join(get_info_aou()['start_msg']),reply_to_message_id=message.message_id,reply_markup=markup_start(message.chat.id,message.chat.username))
     await bot.send_message(message.chat.id,"- اختر خدمة من الخدمات المتاحه .",reply_markup=keyboard_start())
 
 # add admin
@@ -173,10 +192,8 @@ async def delete_admin(message):
 @bot.message_handler(commands=['info'],chat_types=['private'])
 async def delete_admin(message):
     if message.chat.id == OWNER:
-        with open('users.sqlite','rb') as file:
-            await bot.send_document(message.chat.id,file)
-        await bot.send_document(message.chat.id,open('./other/info.json','r'))
-        await bot.send_message(message.chat.id,f'- عدد المشتركين : {len(users.keys())}')
+        await bot.send_document(message.chat.id,open('./other/users.json','r'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
+        await bot.send_document(message.chat.id,open('./other/info.json','r'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
 
 # get books and slides 
 @bot.message_handler(func=lambda message:message.text in ["الكتب","السلايدات"])
