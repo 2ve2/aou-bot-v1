@@ -2,16 +2,12 @@ import asyncio,aiohttp,io,json
 from telebot.async_telebot import AsyncTeleBot
 from telebot import *
 from kvsqlite.sync import Client
-from datetime import datetime
 # from pdf2image import convert_from_bytes
 
-users = Client('./db/users.sqlite')
 admin = Client('./db/admin.sqlite')
 req = Client('./db/req.sqlite')
 req2 = Client('./db/req2.sqlite')
 
-
-time = datetime.now()
 OWNER = 5029420526
 
 bot = AsyncTeleBot('7404500425:AAHxUetTSf1iBMyyF3XbyqbUoEwpOdaq8J4')
@@ -213,8 +209,12 @@ async def get_info_books_and_slides(message):
             try:
                 for i in get_info_aou()['books']:
                     if i['title'] == message.text.lower():
-                        await bot.send_document(message.chat.id,i['file_id'],message.message_id)
-                        req.delete(f"{message.chat.id}")
+                        if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                            await bot.send_document(message.chat.id,i['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
+                            req.delete(f"{message.chat.id}")
+                        else:
+                            await bot.send_document(message.chat.id,i['file_id'],message.message_id)
+                            req.delete(f"{message.chat.id}")
                 if req.get(f"{message.chat.id}")["type"]=='book':
                     await bot.send_message(message.chat.id,'- هذا الكتاب غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
@@ -227,8 +227,12 @@ async def get_info_books_and_slides(message):
             try:
                 for i in get_info_aou()['slides']:
                     if i['title'] == message.text.lower():
-                        await bot.send_document(message.chat.id,i['file_id'],message.message_id)
-                        req.delete(f"{message.chat.id}")
+                        if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                            await bot.send_document(message.chat.id,i['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_slide'}))
+                            req.delete(f"{message.chat.id}")
+                        else:
+                            await bot.send_document(message.chat.id,i['file_id'],message.message_id)
+                            req.delete(f"{message.chat.id}")
                 if req.get(f"{message.chat.id}")["type"]=='slide':
                     await bot.send_message(message.chat.id,'- هذا السلايد غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
@@ -304,7 +308,8 @@ async def get_info_books_and_slides(message):
             except:
                 await bot.send_message(message.chat.id,'- حدث خطأ !!',reply_to_message_id=message.message_id)
                 req.delete(f"{message.chat.id}")   
-    except:
+    except Exception as e:
+        print(e,'ok')
         pass
 def check_if_in_data(meesage):
     if req.exists(f"{meesage.chat.id}"):
@@ -363,9 +368,15 @@ async def call_questions_aou(message):
     try:
         values = [item.get("file_id") or item.get("answer") for item in get_info_aou()["questions"] if item.get("title") == message.text][0]
         if values.startswith("BQA"):
-            await bot.send_document(message.chat.id,values,message.message_id)
+            if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
+            else:
+                await bot.send_document(message.chat.id,values,message.message_id)
         else:
-            await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id)
+            if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
+            else:
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
     except:
         pass     
 
@@ -441,8 +452,45 @@ async def call_add_qus(call):
     req.set(f"{call.message.chat.id}",{'type':"add_qus"})
     await bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text="- ارسل عنوان السؤال .",reply_markup=markup_gen({"الغاء":"cancel"}))
 
+@bot.callback_query_handler(func=lambda call:call.data=='delete_book')
+async def delete_book(call):
+    try:
+        file = call.message.document
+        data = get_info_aou()
+        data["books"] = [user for user in data["books"] if user["file_id"] != file.file_id]
+        with open("./other/info.json", "w", encoding="utf-8") as files:
+            json.dump(data, files, ensure_ascii=False, indent=4)
+            await bot.delete_message(call.message.chat.id,call.message.message_id)
+            await bot.send_message(call.message.chat.id,f'- تم حذف كتاب \n{file.file_name}')
+    except:
+        await bot.send_message(call.message.chat.id,f'- تعذر حذف كتاب \n{file.file_name}')
 
+@bot.callback_query_handler(func=lambda call:call.data=='delete_slide')
+async def delete_slide(call):
+    try:
+        file = call.message.document
+        data = get_info_aou()
+        data["slides"] = [user for user in data["slides"] if user["file_id"] != file.file_id]
+        with open("./other/info.json", "w", encoding="utf-8") as files:
+            json.dump(data, files, ensure_ascii=False, indent=4)
+            await bot.delete_message(call.message.chat.id,call.message.message_id)
+            await bot.send_message(call.message.chat.id,f'- تم حذف سلايد \n{file.file_name}')
+    except:
+        await bot.send_message(call.message.chat.id,f'- تعذر حذف سلايد \n{file.file_name}')
 
+@bot.callback_query_handler(func=lambda call:call.data=='delete_questions')
+async def delete_questions(call):
+    try:
+        name = call.message.reply_to_message.text
+        data = get_info_aou()
+        data["questions"] = [user for user in data["questions"] if user["title"] != name]
+        with open("./other/info.json", "w", encoding="utf-8") as files:
+            json.dump(data, files, ensure_ascii=False, indent=4)
+            await bot.delete_message(call.message.chat.id,call.message.message_id)
+            await bot.send_message(call.message.chat.id,f'- تم حذف سؤال \n{name}')
+    except:
+        await bot.send_message(call.message.chat.id,f'- تعذر حذف سؤال \n{name}')
+        
 if __name__=="__main__":
     while True:
         try:
