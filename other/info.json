@@ -1,6 +1,236 @@
 {
-    "books": [],
-    "slides": [],
+    "books": [
+        {
+            "title": "ar111",
+            "file_id": "BQACAgQAAxkBAAIMCGfJ4yzeYtPCEagKTDWdFq1qltIOAAISFQACpJ1QUjuANkLHcqr9NgQ"
+        },
+        {
+            "title": "gr101",
+            "file_id": "BQACAgQAAxkBAAIMF2fJ5Oz7hewmH8nuQZIuOKj3bloSAAIaFQACpJ1QUo22JCskvIiNNgQ"
+        },
+        {
+            "title": "el098",
+            "file_id": "BQACAgQAAxkBAAIMJWfJ6XADr9ixg7t4KnuHZsEbC7dNAAItFQACpJ1QUhWlsf-dzlXaNgQ"
+        },
+        {
+            "title": "el111",
+            "file_id": "BQACAgQAAxkBAAIMQGfJ-Doo51I8GCoBBwP4n9vRBzo2AAJYFQACpJ1QUmAzBXSSTfmKNgQ"
+        },
+        {
+            "title": "el097",
+            "file_id": "BQACAgQAAxkBAAIMZGfKPwvLDtk9vY6qDS3n3UE9SxbMAAImFQACc91pUKZxURO35ShYNgQ"
+        },
+        {
+            "title": "el112",
+            "file_id": "BQACAgQAAxkBAAINfWfLLnE7eXawzmdOjQbcM8LVNtutAAJ-FgACV0FZUitMTlxrQJbRNgQ"
+        },
+        {
+            "title": "el099",
+            "file_id": "BQACAgQAAxkBAAIOUWfNw950vwZQcF6Uq4M3lUgwEAxFAAKYGAACiMRxUtMNFJWiZ3cRNgQ"
+        },
+        {
+            "title": "el099",
+            "file_id": "BQACAgQAAxkBAAIOVmfNxCanqOg4gbCanutBI1OmBstmAAKZGAACiMRxUkE0F933cTjzNgQ"
+        }
+    ],
+    "slides": [
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMfmfKzCNsL1B3TljTYtZ1YY7-MZrQAAK0FQACV0FZUgeQmb02IihCNgQ"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMg2fKzD7n6L0Sx7iuLOXd-obBQSD3AAK2FQACV0FZUovsVfhWyvq1NgQ"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMimfKzF-oP4JUAAHn-5JD9o1zKhod5AACtxUAAldBWVIHifWvFYisDDYE"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMjmfKzHDlkKGI6y7-h4N2_JXirmvIAAK4FQACV0FZUlz_ptTvh4n7NgQ"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMpGfKzNhaZP6FVj62rm2f0FcO_w-HAAK8FQACV0FZUvYUTLHmQVLVNgQ"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMrGfKzRta1NPiNXlGBBGIc7OPRe1gAAK_FQACV0FZUumpVzbW0kHENgQ"
+        },
+        {
+            "title": "tm105",
+            "file_id": "BQACAgQAAxkBAAIMvWfKzU31tzzAotpCMP0xdtPw-VoDAALBFQACV0FZUu7DnI-DZIArNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIMz2fKzsw2NAM_X-9zhpq_vwOPI7bfAALLFQACV0FZUgsjXFLcMkrUNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM0GfKzswui1woo7_zVlPAiiRKmBkzAALNFQACV0FZUi_l3msl9W0ONgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM6GfKzzsf_QyIqNu5hb4Qeun9OYNZAALRFQACV0FZUiCBtdOHenZqNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM6WfKzzvRec4GPiHkdk_ZxYG6IYrOAALQFQACV0FZUs6Q04xQ-EXrNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM6mfKzzslqTGhmKIa2e7ODwH-gzKJAALSFQACV0FZUpYC9g_1vUwtNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM62fKzzsn2QWq6YCnwrBIE8mrqSpFAALVFQACV0FZUjD-rWabTVVVNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM7GfKzztQvuY-pAjgKjuF996HgAdaAALTFQACV0FZUk6KkEsxbBJoNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM7WfKzzsI178Qhu1pihkBRFFlpGpuAALUFQACV0FZUiPa_-lrmEj8NgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAIM7mfKzzv2m-TOti_vjJ4dLv41qRLGAALWFQACV0FZUoOiAptFWZIJNgQ"
+        },
+        {
+            "title": "none",
+            "file_id": "BQACAgQAAxkBAAIM-2fKz1c7vKuPgDhbD4v6-m_c_SJ3AALYFQACV0FZUuoJ3adgGX00NgQ"
+        },
+        {
+            "title": "none",
+            "file_id": "BQACAgQAAxkBAAIM_GfKz1du6rcVyBsG-uo0uUnOCVAJAALZFQACV0FZUsQLzNjTh-daNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAINLWfK0NNP1rJQrCl89WkjPt_VyJI6AALeFQACV0FZUvdjzomYFAwWNgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAINLmfK0NOktv6h3uqVGBt5AyGCT01cAALdFQACV0FZUgjNHmShq2T_NgQ"
+        },
+        {
+            "title": "tm111",
+            "file_id": "BQACAgQAAxkBAAINL2fK0NOe4EwM01lG9R0QQVTuibtHAALcFQACV0FZUlrF0P8es10lNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOlGfNxVcZaB6hkPnArp5orNKzs6H2AAKcGAACiMRxUpDmBuGjWP9FNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOlWfNxVd-ikA258T-vcSkoXnT4BSLAAKdGAACiMRxUloxUYcoEHayNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOlmfNxVdoaeiV_KX-Pv6dGVSFGUhxAAKeGAACiMRxUtQKlEiQJsBCNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOl2fNxVdfEkMUAotrKh6J4OALcSFaAAKfGAACiMRxUmf5WYmqslcQNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOmGfNxVdhKIMsXEkQuARVTLyTlSusAAKgGAACiMRxUidKkT5SkLSPNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOmWfNxVe3jNtJXGyzFOq2urKRw1SXAAKiGAACiMRxUgABHyd0z87V6zYE"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOmmfNxVdd_bP35Z1afFGXd1egZL5LAAKjGAACiMRxUmAxJJvGPEykNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOm2fNxVcvDi4o16_lszn4F7n5DcF5AAKhGAACiMRxUoVMVSGogLXyNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOqmfNxXotUQYrf3agaIFWYsHIc0cWAAKkGAACiMRxUvJpA2HsgQvqNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIOzGfNxq1aGzu8Ir9V908ner7n2tgNAAKoGAACiMRxUpog4JYElb1PNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO0GfNxrkidGgK6ngOATMGCsa7l5ueAAKpGAACiMRxUqFNtAuUhyl9NgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO1WfNxvw7U0UG2TfKhPNqxpvioKBdAAKtGAACiMRxUunUz8PEPknPNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO1mfNxvx7Yw0Su9j2uQe26t9ecrbkAAKsGAACiMRxUqykgscTjhmQNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO12fNxvz8rj68xcwgnTkR8ULnZOirAAKuGAACiMRxUmnSd5QhzoFnNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO2GfNxvyvtZLRxdeNR-MEuYtQU9HxAAKxGAACiMRxUkab7Xa6I4F0NgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO2WfNxvz3EEZpcPl6ioQvveTZYmZAAAKwGAACiMRxUoKIkaF492tWNgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO2mfNxvzuv7DX0KYzjN4y-lY-fIFWAAKvGAACiMRxUutA_Wmhc5S9NgQ"
+        },
+        {
+            "title": "m251",
+            "file_id": "BQACAgQAAxkBAAIO22fNxvz_ASpTcEyU23LEvRYR7HCqAAKrGAACiMRxUmNwN_X-lAbQNgQ"
+        },
+        {
+            "title": "mt131",
+            "file_id": "BQACAgQAAxkBAAIPCGfNx4pK7fwlGUsl7Ppx4SwN_2m0AAKyGAACiMRxUr7XImfofY1-NgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPGGfNyPtGYUXwZTOfNae7oR-MEVOXAAK0GAACiMRxUhcKHdIurRKFNgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPGWfNyPsdruAddonGOIsx1Hykc9TyAAKzGAACiMRxUrdqNfelcolgNgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPGmfNyPvdNu7CBZd5Boluo6cMr2WPAAK3GAACiMRxUnLeqemgWkoCNgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPG2fNyPtcjONBTdAXwkFzYqZ_aKQDAAK5GAACiMRxUmR8QDaa6STcNgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPHGfNyPuKk-uYiXGjl85eZgQItXMlAAK4GAACiMRxUuUP5CxLqAlnNgQ"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPHWfNyPtLD-cAAXXQUEsi2Wd-8U17ugACthgAAojEcVJrnZicI4_i5TYE"
+        },
+        {
+            "title": "mt132",
+            "file_id": "BQACAgQAAxkBAAIPHmfNyPuesmwgeViX9C2rTxtt2_PnAAK1GAACiMRxUkUqJ2pLAkr9NgQ"
+        },
+        {
+            "title": "t277",
+            "file_id": "BQACAgQAAxkBAAIPMGfNyTX6qGn4eRrKMJghCG6h5zoxAAK6GAACiMRxUqevqzolCPSGNgQ"
+        },
+        {
+            "title": "tm103",
+            "file_id": "BQACAgQAAxkBAAIPTmfNydyOxNK8kJ9eeByJ7Wq2VvgTAAK7GAACiMRxUspIvQ1KK75ANgQ"
+        }
+    ],
     "plan": [
         {
             "title": "الأنظمة",
@@ -47,6 +277,34 @@
         {
             "title": "طلبات الانتقال والانسحاب والتأجيل",
             "file_id": "BQACAgQAAxkBAAIFuGe88dRAGDX1-4MD9ZyFM2miorRZAALcFQACIXHoUewPTZjFXmcDNgQ"
+        },
+        {
+            "title": "تاجيل الاختبار",
+            "file_id": "BQACAgQAAxkBAAIMS2fKAAFDPKdNAAFGnYtg8wVdPu4aRZ4AAm0VAAKknVBSZl-KaXuLgeY2BA"
+        },
+        {
+            "title": "الفصول الدراسية",
+            "answer": "فصلين دراسيين + الفصل الصيفي"
+        },
+        {
+            "title": "مميزات الايميل الجامعي",
+            "answer": "مميزات الايميل الجامعي : \n\nهو الوسيط بين الطالب و الجامعة \nحيث يمكنه التواصل مع الدكاترة , منسقين المواد , الاقسام \nو يمكنه تلقي الاخبار مثل مواعيد الاختبارات , فعاليات الاندية الطلابية , الدورات الحضورية و الاونلاين\n\nالخدمات المجانية : \n1- جميع برامج الاوفيس مجانا \n( مثل الاكسل , الوورد , الباوربوينت )\n\n2- حساب كانفا برو مجانا \n( الكانفا هو برنامج تصميم احترافي ) \n\n3- مساحة تخزين مجانية على OneDrive \n( تبلغ المساحة 1 تيرا ! , يمكنك الدخول على الحساب من جميع اجهزتك الذكية ) \n\n4- GitHub Pro ادوات مجانية في\n  ( وهو برنامج تتوفر فيه العديد من الادوات البرمجية و يمكن للمبرمجين الاستفادة منه بشكل كبير ) \n\n5- أدوات مجانية في Notion , Evernote  \n( وهي برامج لتنظيم المهام موجودة على جميع الاجهزة و الويب ) \n\n6- دورات مجانية في Coursera , Udemy  \n\n7- رصيد مجاني في خدمات Google Cloud السحابية   \n\n8- خدمات سحابية مجانية في Amazon AWS Educate   \n\n9- بيئات برمجية مجانية ( PyCharm , IntelliJ IDEA )     \n\n10- Domain مجاني من Namecheap  \n\n\n\nالخدمات المخفضة : \n1- خصم 70% على برامج الادوبي \n( مثل الفوتوشوب ) \n\n2- خصم على Spotify , YouTube Premium   \n\n3- خصم على بعض أجهزة Apple , Dell , Lenovo"
+        },
+        {
+            "title": "شرح علامات المادة",
+            "answer": "S ناجح \n\nPass ناجح \n\nGrade pending ناجح \n\nFail راسب\n\nFL مؤجل\n\nL مؤجل\n\nFF راسب  في الفاينل\n\n------------------------------\n\nA = 90+\n\nB+ = 82 - 89 \n\nB = 74 - 81\n\nC+ = 66 - 73\n\nC = 58 - 65\n\nD = 50 - 57\n\nF = أقل من 50"
+        },
+        {
+            "title": "التسجيل في الجامعة",
+            "answer": "رابط مباشر للتسجيل : \nhttps://www.arabou.edu.sa/ar/admission/pages/undergraduate-apply.aspx\n\nرسوم التسجيل : \n444 \n\nبعد التسجيل و دفع الرسوم ستصلك رسالة عبر الايميل لحضور اختبار تحديد المستوى \nبعد اختبار تحديد المستوى ستصلك درجة الاختبار و بناءاً عليها يمكنك تسجيل المواد \n( كلما كانت الدرجة اعلى يمكنك تجاوز مواد ) \n\nيمكنك معرفة درجتك للاختبار مباشرة عبر سوال المراقب بعد الاختبار \nاو ستصل الدرجة عبر الايميل ب اسبوع تقريبا"
+        },
+        {
+            "title": "اختبار تحديد المستوى و شرح الدورات المكثفة",
+            "answer": "اختبار تحديد المستوى هو اختبار عن اللغة الانقليزية مكون من 40-45 سوال  \nمدة الاختبار 90 دقيقه \nهناك 3 دورات انقليزي مكثفة بناء على درجتك في الاختبار ستبدا باحدها و تتجاوز التي قبلها \n\n------------------------------\n\nدرجات الاختبار و المواد التي يمكنك تنزيها معها : \n\n0-12 EL097\n( لايمكنك تنزيل اي مادة معها )\n\n13-34 EL098 \n( عند البدا بها يمكنك تنزيل مادة GR101 معها فقط )\n\n35-55 EL099\n( عند البدا بها يمكنك تنزيل GR101 , AR111 ,TU170)\n\n56-77 EL111 \n( عند البدا بها يمكنك تنزيل GR101 , AR111 ,TU170\nكما يمكنك تنزيل بعض مواد التخصص )\n\n\n78-99 EL112\n( عند البدا بها يمكنك تنزيل GR101 , AR111 ,TU170 \nكما يمكنك تنزيل بعض مواد التخصص )\n\n100-120 \nتعفى من جميع الدورات و المواد التي في الاعلى مبروووك\n\n------------------------------\n شرح الدورات : \n\nEL097 , EL098 , EL099 \nهي عبارة عن دورات مكثفة تعلمك اللغة الانقليزية \nمدة الدورة الواحدة شهرين و يمكنك في الترم الواحد تنزيل دورتين \nدرجة الدورات لا تدخل في المعدل فقط يجب عليك النجاح فيها بدرجة 50 لتنتقل للمرحلة التالية\n\n\nEL111 , EL112 \nهي عبارة عن متطلبات جامعة اجبارية \nمدة المادة الواحدة ترم كامل \nو درجة المادة تدخل في المعدل \n\n\nGR101 \n( مادة عامة عن التعلم الذاتي \n\nAR111 \n( مادة عامة عن اللغة العربية )\n\nTU170 \n( مادة عامة عن اساسيات الحاسب )"
+        },
+        {
+            "title": "رسوم فتح جدول",
+            "answer": "469 ريال \nتدفع  كل ترم قبل تسجيل المواد"
         }
     ],
     "start_msg": [
