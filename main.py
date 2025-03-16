@@ -2,7 +2,6 @@ import asyncio,aiohttp,io,json
 from telebot.async_telebot import AsyncTeleBot
 from telebot import *
 from kvsqlite.sync import Client
-# from pdf2image import convert_from_bytes
 
 admin = Client('./db/admin.sqlite')
 req = Client('./db/req.sqlite')
@@ -10,6 +9,7 @@ req2 = Client('./db/req2.sqlite')
 
 OWNER = 5029420526
 
+# bot = AsyncTeleBot('7809060058:AAG1iPiFHUUxsnsW0G0gA8dbp3z11G4x1Wo')
 bot = AsyncTeleBot('7404500425:AAHxUetTSf1iBMyyF3XbyqbUoEwpOdaq8J4')
 
 # markup generate
@@ -21,27 +21,6 @@ def markup_gen(loop):
                     text=f"{_[0]}",
                     callback_data=f"{_[1]}",
                 ))
-    return keyboard
-
-# markup celendar
-def markup_celender():
-    keyboard = types.InlineKeyboardMarkup(row_width=7)
-    keyboard.add(
-        types.InlineKeyboardButton(
-            text=f"التقويم الاكاديمي",
-            url="https://www.arabou.edu.sa/ar/students/pages/academic-calendar.aspx"
-    ))
-    keyboard.add(
-    types.InlineKeyboardButton(
-        text=f"جدول الاختبارات النصفية",
-        url="https://www.arabou.edu.sa/ar/students/examinations/Pages/MTA-Exam.aspx"
-    ))
-    keyboard.add(
-    types.InlineKeyboardButton(
-        text=f"جدول الاختبارات النهائية",
-        url="https://www.arabou.edu.sa/ar/students/examinations/Pages/Final-Exam.aspx"
-    ))
-
     return keyboard
 
 # keyboaord start
@@ -66,28 +45,25 @@ def keyboard_start():
 # keyboard generate
 def keyboard_gen(loop):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    for i in range(0, len(loop), 2):
+    if len(loop)%2 ==0:
+        for i in range(0, len(loop), 2):
+            keyboard.add(
+                types.KeyboardButton(loop[i]),
+                types.KeyboardButton(loop[i+1]),
+            )
         keyboard.add(
-            types.KeyboardButton(loop[i]),
-            types.KeyboardButton(loop[i+1]),
-        )
-    keyboard.add(
-            types.KeyboardButton('الرجوع')
-        )
-    return keyboard
-
-
-# keyboard generate
-def keyboard_gen1(loop):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    for i in loop:
+                types.KeyboardButton('الرجوع')
+            )
+        return keyboard
+    else:
+        for i in loop:
+            keyboard.add(
+                types.KeyboardButton(i),
+            )
         keyboard.add(
-            types.KeyboardButton(i),
+                types.KeyboardButton('الرجوع')
         )
-    keyboard.add(
-            types.KeyboardButton('الرجوع')
-        )
-    return keyboard
+        return keyboard
 
 # function to add books and slides
 def add_books_or_slides(title,file_id,value,name):
@@ -142,7 +118,7 @@ def markup_start(chat_id,username):
             ),        
             types.InlineKeyboardButton(
             text=f"شارك البوت",
-            url="Https://t.me/share?url=t.me/aouksabot"
+            url="https://t.me/share?url=t.me/aouksabot"
         ))
     keyboard.add(
             types.InlineKeyboardButton(
@@ -188,8 +164,14 @@ async def delete_admin(message):
 @bot.message_handler(commands=['info'],chat_types=['private'])
 async def delete_admin(message):
     if message.chat.id == OWNER:
-        await bot.send_document(message.chat.id,open('./other/users.json','r'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
-        await bot.send_document(message.chat.id,open('./other/info.json','r'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
+        await bot.send_document(message.chat.id,open('./other/users.json','r',encoding='utf-8'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
+        await bot.send_document(message.chat.id,open('./other/info.json','r',encoding='utf-8'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
+
+# get info from userid
+# @bot.message_handler(commands=['find'],chat_types=['private'])
+# async def get_info_from_userid(message):
+#     if message.chat.id == OWNER:
+#         pass
 
 # get books and slides 
 @bot.message_handler(func=lambda message:message.text in ["الكتب","السلايدات"])
@@ -207,36 +189,36 @@ async def get_info_books_and_slides(message):
     try:
         if req.get(f"{message.chat.id}")['type']=='book':
             try:
-                for i in get_info_aou()['books']:
-                    if i['title'] == message.text.lower():
+                results_book = [book for book in get_info_aou()['books'] if message.text.lower() in book["title"].lower()]
+                if results_book and isinstance(results_book, list):
+                    for book in results_book:
                         if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
-                            await bot.send_document(message.chat.id,i['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
+                            await bot.send_document(message.chat.id,book['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
                             req.delete(f"{message.chat.id}")
                         else:
-                            await bot.send_document(message.chat.id,i['file_id'],message.message_id)
+                            await bot.send_document(message.chat.id,book['file_id'],message.message_id)
                             req.delete(f"{message.chat.id}")
-                if req.get(f"{message.chat.id}")["type"]=='book':
-                    await bot.send_message(message.chat.id,'- هذا الكتاب غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
                 else:
+                    await bot.send_message(message.chat.id,'- هذا الكتاب غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
             except:
                 req.delete(f"{message.chat.id}")
 
         elif req.get(f"{message.chat.id}")['type']=='slide':
             try:
-                for i in get_info_aou()['slides']:
-                    if i['title'] == message.text.lower():
+                results_slide = [slide for slide in get_info_aou()['slides'] if message.text.lower() in slide["title"].lower()]
+                if results_slide and isinstance(results_slide, list):
+                    for slide in results_slide:
                         if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
-                            await bot.send_document(message.chat.id,i['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_slide'}))
+                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
                             req.delete(f"{message.chat.id}")
                         else:
-                            await bot.send_document(message.chat.id,i['file_id'],message.message_id)
+                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id)
                             req.delete(f"{message.chat.id}")
-                if req.get(f"{message.chat.id}")["type"]=='slide':
-                    await bot.send_message(message.chat.id,'- هذا السلايد غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
                 else:
+                    await bot.send_message(message.chat.id,'- هذا السلايد غير متوفر .',reply_to_message_id=message.message_id)
                     req.delete(f"{message.chat.id}")
             except:
                 req.delete(f"{message.chat.id}")
@@ -279,6 +261,38 @@ async def get_info_books_and_slides(message):
             except:
                 await bot.send_message(message.chat.id,'- حدث خطأ !!',reply_to_message_id=message.message_id)
                 req.delete(f"{message.chat.id}")
+
+        elif req.get(f"{message.chat.id}")['type']=='add_date':
+            try:
+                if "name" in req.get(f"{message.chat.id}"):
+                    if message.text:
+                        title = req.get(f"{message.chat.id}")['name']
+                        file_id = message.text
+                        if add_books_or_slides(title=title.lower(),file_id=file_id,value='answer',name='dates'):
+                            await bot.send_message(message.chat.id,'- تم اضافة الاجابه .',reply_to_message_id=message.message_id)
+                            req.delete(f"{message.chat.id}")
+                        else:
+                            await bot.send_message(message.chat.id,'- تعذر اضافة هذه الاجابه !!',reply_to_message_id=message.message_id)
+                            req.delete(f"{message.chat.id}")
+                    else:
+                        title = req.get(f"{message.chat.id}")['name']
+                        file_id = message.document.file_id
+                        if add_books_or_slides(title=title.lower(),file_id=file_id,value='file_id',name='dates'):
+                            await bot.send_message(message.chat.id,'- تم اضافة الاجابه .',reply_to_message_id=message.message_id)
+                            req.delete(f"{message.chat.id}")
+                        else:
+                            await bot.send_message(message.chat.id,'- تعذر اضافة هذه الاجابه !!',reply_to_message_id=message.message_id)
+                            req.delete(f"{message.chat.id}")
+                else:
+                    t = req.get(f"{message.chat.id}")
+                    t.update({'name':f"{message.text}"})
+                    req.set(f"{message.chat.id}",t)
+                    await bot.send_message(message.chat.id,"- ارسل اجابة الموعد .",reply_to_message_id=message.message_id,reply_markup=markup_gen({"الغاء":"cancel"}))
+            except:
+                await bot.send_message(message.chat.id,'- حدث خطأ !!',reply_to_message_id=message.message_id)
+                req.delete(f"{message.chat.id}")   
+
+
         elif req.get(f"{message.chat.id}")['type']=='add_qus':
             try:
                 if "name" in req.get(f"{message.chat.id}"):
@@ -308,8 +322,7 @@ async def get_info_books_and_slides(message):
             except:
                 await bot.send_message(message.chat.id,'- حدث خطأ !!',reply_to_message_id=message.message_id)
                 req.delete(f"{message.chat.id}")   
-    except Exception as e:
-        print(e,'ok')
+    except:
         pass
 def check_if_in_data(meesage):
     if req.exists(f"{meesage.chat.id}"):
@@ -318,7 +331,7 @@ def check_if_in_data(meesage):
 # get info celendar
 @bot.message_handler(func=lambda message:message.text=='المواعيد' , chat_types=['private'])
 async def main_get_info_celendar(message):
-    await bot.send_message(message.chat.id,'- اختر احد المواعيد .',reply_to_message_id=message.message_id,reply_markup=markup_celender())
+    await bot.send_message(message.chat.id,'- اختر احد المواعيد .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['dates']]))
 
 
 # get info branches from json
@@ -360,7 +373,25 @@ async def main_plan_aou(message):
 # get info questions aou with keyboard
 @bot.message_handler(func=lambda message:message.text=='الاسئلة الشائعه',chat_types=['private'])
 async def main_questions_aou(message):
-    await bot.send_message(message.chat.id,'- اختر احد الاسئلة الشائعة .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen1([item['title'] for item in get_info_aou()['questions']]))
+    await bot.send_message(message.chat.id,'- اختر احد الاسئلة الشائعة .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['questions']]))
+
+# get info dates aou with message
+@bot.message_handler(func=lambda message:message.text in [item['title'] for item in get_info_aou()['dates']],chat_types=['private'])
+async def call_questions_aou(message):
+    try:
+        values = [item.get("file_id") or item.get("answer") for item in get_info_aou()["dates"] if item.get("title") == message.text][0]
+        if values.startswith("BQA"):
+            if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_gen({'حذف':'delete_date'}))
+            else:
+                await bot.send_document(message.chat.id,values,message.message_id)
+        else:
+            if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_date'}))
+            else:
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id)
+    except:
+        pass     
 
 # get info questions aou with message
 @bot.message_handler(func=lambda message:message.text in [item['title'] for item in get_info_aou()['questions']],chat_types=['private'])
@@ -376,7 +407,7 @@ async def call_questions_aou(message):
             if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
                 await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
             else:
-                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id)
     except:
         pass     
 
@@ -384,35 +415,6 @@ async def call_questions_aou(message):
 @bot.message_handler(func=lambda message:message.text in [item['title'] for item in get_info_aou()['plan']],chat_types=['private'])
 async def call_plan_aou(message):
     await bot.send_document(message.chat.id,next(item for item in get_info_aou()['plan'] if item['title'] == message.text)['file_id'],message.message_id)
-# # convert pdf to png main
-# @bot.message_handler(func=lambda message:message.text=='تحويل ملف pdf الى صور png' , chat_types=['private'])
-# async def main_pdf_to_png(message):
-#     await bot.send_message(message.chat.id,'- ارسل ملف pdf ليتم تحويله الى صور .',reply_to_message_id=message.message_id,reply_markup=markup_gen({"الغاء":"cancel"}))
-#     pdf.set(f"{message.chat.id}",True)
-
-# convert pdf to png script
-# @bot.message_handler(chat_types=['private'],content_types=['document'],func=lambda message:pdf.get(f"{message.chat.id}"))
-# async def convert_pdf_to_png(message):
-#     try:
-#         if message.document.mime_type == 'application/pdf':
-#             if message.document.file_size > 6000000:
-#                 await bot.reply_to(message,'- حجم الملف كبير !')
-#                 pdf.delete(f"{message.chat.id}")
-#             else:
-#                 file_info = await bot.get_file(message.document.file_id)
-#                 file_data = await bot.download_file(file_info.file_path)
-#                 images = convert_from_bytes(file_data,dpi=300)
-#                 for img in images:
-#                     byte_io = io.BytesIO()
-#                     img.save(byte_io, 'PNG')
-#                     byte_io.seek(0)
-#                     await bot.send_photo(message.chat.id, byte_io)
-#                 await bot.reply_to(message,'- تم الانتهاء .')
-#                 pdf.delete(f"{message.chat.id}")
-#                 byte_io.close()
-#     except:
-#         pdf.delete(f"{message.chat.id}")
-#         await bot.reply_to(message,'- لا يمكن تحويل هذا الملف , حاول في وقت لاحق !')
 
 # handler = back to menu keyboord
 @bot.message_handler(func=lambda message:message.text=='الرجوع',chat_types=['private'])
@@ -434,7 +436,7 @@ async def call_back(call):
 
 @bot.callback_query_handler(func=lambda call:call.data=='settings')
 async def call_settings(call):
-    await bot.send_message(call.message.chat.id,'- اختر احد الاعدادات المتاحه .',reply_markup=markup_gen({"اضافة كتاب":"add_book","اضافة سلايد":"add_slide","اضافة سؤال":"add_qus"}))
+    await bot.send_message(call.message.chat.id,'- اختر احد الاعدادات المتاحه .',reply_markup=markup_gen({"اضافة كتاب":"add_book","اضافة سلايد":"add_slide","اضافة موعد":"add_date","اضافة سؤال":"add_qus"}))
 
 @bot.callback_query_handler(func=lambda call:call.data=='add_book')
 async def call_add_books(call):
@@ -446,6 +448,11 @@ async def call_add_books(call):
 async def call_add_slides(call):
     req.set(f"{call.message.chat.id}",{'type':"add_slide"})
     await bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text="- ارسل اسم السلايد .",reply_markup=markup_gen({"الغاء":"cancel"}))
+
+@bot.callback_query_handler(func=lambda call:call.data=='add_date')
+async def call_add_qus(call):
+    req.set(f"{call.message.chat.id}",{'type':"add_date"})
+    await bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text="- ارسل عنوان الموعد .",reply_markup=markup_gen({"الغاء":"cancel"}))
 
 @bot.callback_query_handler(func=lambda call:call.data=='add_qus')
 async def call_add_qus(call):
@@ -460,8 +467,9 @@ async def delete_book(call):
         data["books"] = [user for user in data["books"] if user["file_id"] != file.file_id]
         with open("./other/info.json", "w", encoding="utf-8") as files:
             json.dump(data, files, ensure_ascii=False, indent=4)
-            await bot.delete_message(call.message.chat.id,call.message.message_id)
-            await bot.send_message(call.message.chat.id,f'- تم حذف كتاب \n{file.file_name}')
+            files.close()
+        await bot.delete_message(call.message.chat.id,call.message.message_id)
+        await bot.send_message(call.message.chat.id,f'- تم حذف كتاب \n{file.file_name}')
     except:
         await bot.send_message(call.message.chat.id,f'- تعذر حذف كتاب \n{file.file_name}')
 
@@ -473,10 +481,25 @@ async def delete_slide(call):
         data["slides"] = [user for user in data["slides"] if user["file_id"] != file.file_id]
         with open("./other/info.json", "w", encoding="utf-8") as files:
             json.dump(data, files, ensure_ascii=False, indent=4)
-            await bot.delete_message(call.message.chat.id,call.message.message_id)
-            await bot.send_message(call.message.chat.id,f'- تم حذف سلايد \n{file.file_name}')
+            files.close()
+        await bot.delete_message(call.message.chat.id,call.message.message_id)
+        await bot.send_message(call.message.chat.id,f'- تم حذف سلايد \n{file.file_name}')
     except:
         await bot.send_message(call.message.chat.id,f'- تعذر حذف سلايد \n{file.file_name}')
+
+@bot.callback_query_handler(func=lambda call:call.data=='delete_date')
+async def delete_questions(call):
+    try:
+        name = call.message.reply_to_message.text
+        data = get_info_aou()
+        data["dates"] = [user for user in data["dates"] if user["title"] != name]
+        with open("./other/info.json", "w", encoding="utf-8") as files:
+            json.dump(data, files, ensure_ascii=False, indent=4)
+            files.close()
+        await bot.delete_message(call.message.chat.id,call.message.message_id)
+        await bot.send_message(call.message.chat.id,f'- تم حذف الموعد \n{name}')
+    except:
+        await bot.send_message(call.message.chat.id,f'- تعذر حذف الموعد \n{name}')
 
 @bot.callback_query_handler(func=lambda call:call.data=='delete_questions')
 async def delete_questions(call):
@@ -486,8 +509,9 @@ async def delete_questions(call):
         data["questions"] = [user for user in data["questions"] if user["title"] != name]
         with open("./other/info.json", "w", encoding="utf-8") as files:
             json.dump(data, files, ensure_ascii=False, indent=4)
-            await bot.delete_message(call.message.chat.id,call.message.message_id)
-            await bot.send_message(call.message.chat.id,f'- تم حذف سؤال \n{name}')
+            files.close()
+        await bot.delete_message(call.message.chat.id,call.message.message_id)
+        await bot.send_message(call.message.chat.id,f'- تم حذف سؤال \n{name}')
     except:
         await bot.send_message(call.message.chat.id,f'- تعذر حذف سؤال \n{name}')
         
