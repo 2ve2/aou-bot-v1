@@ -211,7 +211,7 @@ async def get_info_books_and_slides(message):
                 if results_slide and isinstance(results_slide, list):
                     for slide in results_slide:
                         if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
-                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
+                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_slide'}))
                             req.delete(f"{message.chat.id}")
                         else:
                             await bot.send_document(message.chat.id,slide['file_id'],message.message_id)
