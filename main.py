@@ -10,7 +10,7 @@ req2 = Client('./db/req2.sqlite')
 OWNER = 5029420526
 
 # bot = AsyncTeleBot('7809060058:AAG1iPiFHUUxsnsW0G0gA8dbp3z11G4x1Wo')
-bot = AsyncTeleBot('7404500425:AAE_CqE_yPR1xPkEjcIp6TMBeuhI7TLiQaM')
+bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8')
 
 # markup generate
 def markup_gen(loop):
