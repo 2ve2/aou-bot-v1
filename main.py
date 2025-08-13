@@ -9,8 +9,18 @@ req2 = Client('./db/req2.sqlite')
 
 OWNER = 5029420526
 
-# bot = AsyncTeleBot('7809060058:AAG1iPiFHUUxsnsW0G0gA8dbp3z11G4x1Wo')
-bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8')
+bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8') # To Test
+
+# inline mode generate
+def inline_gen(title):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(
+        types.InlineKeyboardButton(
+                text="مشاركة المنشور 📤",
+                switch_inline_query=title
+            ))
+    return markup
+
 
 # markup generate
 def markup_gen(loop):
@@ -27,18 +37,22 @@ def markup_gen(loop):
 def keyboard_start():
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(
-            types.KeyboardButton('السلايدات'),
-            types.KeyboardButton('الكتب'),
+            types.KeyboardButton('السلايدات 📋'),
+            types.KeyboardButton('الكتب 📚'),
         )
         keyboard.add(
-            types.KeyboardButton('المواعيد'),
-            types.KeyboardButton('الايميلات'),
+            types.KeyboardButton('المواعيد 🗓️'),
+            types.KeyboardButton('الايميلات 💌'),
         )
         keyboard.add(
-            types.KeyboardButton('الخطط الدراسية لجميع التخصصات')
+            types.KeyboardButton('الخطط الدراسية لجميع التخصصات 🎯')
         )
         keyboard.add(
-            types.KeyboardButton('الاسئلة الشائعه')
+            types.KeyboardButton('الدورات والمعسكرات ( قريبا ) 🚀')
+        )
+
+        keyboard.add(
+            types.KeyboardButton('الاسئلة الشائعه ❓')
         )
         return keyboard
 
@@ -113,12 +127,12 @@ def markup_start(chat_id,username):
     keyboard = types.InlineKeyboardMarkup(row_width=7)
     keyboard.add(
             types.InlineKeyboardButton(
-                text=f"قناة البوت",
+                text=f"قناة البوت 📣",
                 url=f"https://t.me/aouksaa",
             ),        
             types.InlineKeyboardButton(
-            text=f"شارك البوت",
-            url="https://t.me/share?url=t.me/aouksabot"
+                text=f"شارك البوت 🤝",
+                switch_inline_query="جرب بوت المساعد الطلابي الخاص بالجامعة العربية المفتوحة الان"
         ))
     keyboard.add(
             types.InlineKeyboardButton(
@@ -167,16 +181,10 @@ async def delete_admin(message):
         await bot.send_document(message.chat.id,open('./other/users.json','r',encoding='utf-8'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
         await bot.send_document(message.chat.id,open('./other/info.json','r',encoding='utf-8'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
 
-# get info from userid
-# @bot.message_handler(commands=['find'],chat_types=['private'])
-# async def get_info_from_userid(message):
-#     if message.chat.id == OWNER:
-#         pass
-
 # get books and slides 
-@bot.message_handler(func=lambda message:message.text in ["الكتب","السلايدات"])
+@bot.message_handler(func=lambda message:message.text in ["الكتب 📚","السلايدات 📋"])
 async def get_books_and_slides(message):
-    if message.text == "الكتب":
+    if message.text == "الكتب 📚":
         req.set(f"{message.chat.id}",{'type':'book'})
         await bot.send_message(message.chat.id,'- ارسل اسم الكتاب .',reply_to_message_id=message.message_id,reply_markup=markup_gen({'الغاء':'cancel'}))
     else:
@@ -211,7 +219,7 @@ async def get_info_books_and_slides(message):
                 if results_slide and isinstance(results_slide, list):
                     for slide in results_slide:
                         if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
-                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_slide'}))
+                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
                             req.delete(f"{message.chat.id}")
                         else:
                             await bot.send_document(message.chat.id,slide['file_id'],message.message_id)
@@ -329,13 +337,13 @@ def check_if_in_data(meesage):
         return True
 
 # get info celendar
-@bot.message_handler(func=lambda message:message.text=='المواعيد' , chat_types=['private'])
+@bot.message_handler(func=lambda message:message.text=='المواعيد 🗓️' , chat_types=['private'])
 async def main_get_info_celendar(message):
     await bot.send_message(message.chat.id,'- اختر احد المواعيد .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['dates']]))
 
 
 # get info branches from json
-@bot.message_handler(func=lambda message:message.text == "الايميلات",chat_types=['private'])
+@bot.message_handler(func=lambda message:message.text == "الايميلات 💌",chat_types=['private'])
 async def main_get_info_emails(message):
     await bot.send_message(message.chat.id,"- اختر احد الفروع .",reply_to_message_id=message.message_id,reply_markup=keyboard_gen([branch['branch_name'] for branch in get_info_emails()['branches']]))
 
@@ -358,6 +366,7 @@ async def call2_get_info_emails(message):
                 for department in branch["departments"]:
                     if department["department_name"] == str(message.text):
                         messages+=f"🏢 قسم {department['department_name']}\n\n"
+                        messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
                         for email in department["emails"]:
                             messages += f"• 👤 الموظف/ة : {email['name']}\n"
                             messages += f"• ✉️ الايميل : {email['email']}\n-\n"
@@ -366,12 +375,12 @@ async def call2_get_info_emails(message):
         pass
 
 # get info plan aou with keyboard
-@bot.message_handler(func=lambda message:message.text=='الخطط الدراسية لجميع التخصصات',chat_types=['private'])
+@bot.message_handler(func=lambda message:message.text=='الخطط الدراسية لجميع التخصصات 🎯',chat_types=['private'])
 async def main_plan_aou(message):
     await bot.send_message(message.chat.id,'- اختر احد الخطط الدراسية .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['plan']]))
 
 # get info questions aou with keyboard
-@bot.message_handler(func=lambda message:message.text=='الاسئلة الشائعه',chat_types=['private'])
+@bot.message_handler(func=lambda message:message.text=='الاسئلة الشائعه ❓',chat_types=['private'])
 async def main_questions_aou(message):
     await bot.send_message(message.chat.id,'- اختر احد الاسئلة الشائعة .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['questions']]))
 
@@ -515,6 +524,25 @@ async def delete_questions(call):
     except:
         await bot.send_message(call.message.chat.id,f'- تعذر حذف سؤال \n{name}')
         
+# INLINE BOT MODE !!
+@bot.inline_handler(lambda query:query.query=="جرب بوت المساعد الطلابي الخاص بالجامعة العربية المفتوحة الان" or len(query.query)==0)
+async def default_query(inline_query):
+    try:
+        r = types.InlineQueryResultArticle(
+            id='1',
+            title="ِAOU BOT",
+            description="اضغط هنا لنشر البوت",
+            input_message_content=types.InputTextMessageContent(''.join(get_info_aou()['start_msg'])),
+            thumbnail_url="https://i.postimg.cc/D0D9yPBw/14718d12-60be-4d04-bf0a-15dc28c091a0.jpg",
+            reply_markup=types.InlineKeyboardMarkup().add(
+                types.InlineKeyboardButton("جرب البوت الان !", url="https://t.me/aouksabot")
+            )
+        )
+        await bot.answer_inline_query(inline_query.id, [r])
+    except:
+        pass
+
+
 if __name__=="__main__":
     while True:
         try:
