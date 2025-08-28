@@ -371,8 +371,8 @@ async def call2_get_info_emails(message):
                             messages += f"• 👤 الموظف/ة : {email['name']}\n"
                             messages += f"• ✉️ الايميل : {email['email']}\n-\n"
         await bot.send_message(message.chat.id, messages,reply_to_message_id=message.message_id)
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 # get info plan aou with keyboard
 @bot.message_handler(func=lambda message:message.text=='الخطط الدراسية لجميع التخصصات 🎯',chat_types=['private'])
