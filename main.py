@@ -219,8 +219,7 @@ async def broadcast(message):
                         time.sleep(1)
                     except Exception as e:
                         fail_count += 1
-                        if "blocked" in str(e).lower():
-                            await bot.send_message(OWNER,f"تعذر الارسال {user['id']}: {e}")
+                        await bot.send_message(OWNER,f"تعذر الارسال {user['id']}\n{e}")
                 
                 time.sleep(1)
             
