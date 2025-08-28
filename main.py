@@ -1,6 +1,7 @@
 import asyncio,aiohttp,io,json
 from telebot.async_telebot import AsyncTeleBot
 from telebot import *
+from telebot.util import *
 from kvsqlite.sync import Client
 
 admin = Client('./db/admin.sqlite')
@@ -11,16 +12,21 @@ OWNER = 5029420526
 
 bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8') # To Test
 
-# inline mode generate
-def inline_gen(title):
-    markup = types.InlineKeyboardMarkup()
-    markup.add(
-        types.InlineKeyboardButton(
-                text="مشاركة المنشور 📤",
-                switch_inline_query=title
-            ))
-    return markup
 
+# markup info of bot 
+def markup_channel():
+    keyboard = types.InlineKeyboardMarkup(row_width=7)
+    keyboard.add(
+            types.InlineKeyboardButton(
+                text=f"قناة البوت 📣",
+                url=f"https://t.me/aouksaa",
+            ),        
+            types.InlineKeyboardButton(
+                text=f"شارك البوت 🤝",
+                switch_inline_query="جرب بوت المساعد الطلابي الخاص بالجامعة العربية المفتوحة الان"
+        ))
+
+    return keyboard
 
 # markup generate
 def markup_gen(loop):
@@ -181,6 +187,55 @@ async def delete_admin(message):
         await bot.send_document(message.chat.id,open('./other/users.json','r',encoding='utf-8'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
         await bot.send_document(message.chat.id,open('./other/info.json','r',encoding='utf-8'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
 
+# send message to users
+@bot.message_handler(commands=['broadcast'],chat_types=['private'])
+async def broadcast(message):
+    try:
+        if message.chat.id == OWNER:
+            if message.reply_to_message:
+                broadcast_text = message.reply_to_message.text
+            else:
+                broadcast_text = message.text.replace('/broadcast', '').strip()
+            
+            if not broadcast_text:
+                await antiflood(bot.reply_to, message, "يرجى اضافة رساله او الرد على رساله")
+                return
+            
+            processing_msg = await antiflood(bot.reply_to, message, "جاري الإرسال للمستخدمين")
+
+            success_count = 0
+            fail_count = 0
+            users = get_info_users()['users']
+            total_users = len(users)
+            
+            batch_size = 30
+            for i in range(0, total_users, batch_size):
+                batch = users[i:i + batch_size]
+                
+                for user in batch:
+                    try:
+                        await antiflood(bot.send_message, user['id'], f"{broadcast_text}", reply_markup=markup_channel(), parse_mode='HTML', number_retries=3)
+                        success_count += 1
+                        time.sleep(1)
+                    except Exception as e:
+                        fail_count += 1
+                        if "blocked" in str(e).lower():
+                            await bot.send_message(OWNER,f"تعذر الارسال {user['id']}: {e}")
+                
+                time.sleep(1)
+            
+            report_text = f"""
+✅ تم الانتهاء من الإرسال:
+• عدد المستخدمين: {total_users}
+• تم الإرسال بنجاح: {success_count}
+• فشل في الإرسال: {fail_count}
+• نسبة النجاح: {(success_count/total_users*100):.1f}%"""
+
+            await antiflood(bot.edit_message_text, report_text, processing_msg.chat.id, processing_msg.message_id)
+    except:
+        pass
+
+
 # get books and slides 
 @bot.message_handler(func=lambda message:message.text in ["الكتب 📚","السلايدات 📋"])
 async def get_books_and_slides(message):
@@ -204,7 +259,7 @@ async def get_info_books_and_slides(message):
                             await bot.send_document(message.chat.id,book['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
                             req.delete(f"{message.chat.id}")
                         else:
-                            await bot.send_document(message.chat.id,book['file_id'],message.message_id)
+                            await bot.send_document(message.chat.id,book['file_id'],message.message_id,reply_markup=markup_channel())
                             req.delete(f"{message.chat.id}")
                     req.delete(f"{message.chat.id}")
                 else:
@@ -222,7 +277,7 @@ async def get_info_books_and_slides(message):
                             await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_gen({'حذف':'delete_book'}))
                             req.delete(f"{message.chat.id}")
                         else:
-                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id)
+                            await bot.send_document(message.chat.id,slide['file_id'],message.message_id,reply_markup=markup_channel())
                             req.delete(f"{message.chat.id}")
                     req.delete(f"{message.chat.id}")
                 else:
@@ -366,11 +421,11 @@ async def call2_get_info_emails(message):
                 for department in branch["departments"]:
                     if department["department_name"] == str(message.text):
                         messages+=f"🏢 قسم {department['department_name']}\n\n"
-                        messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
+                        # messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
                         for email in department["emails"]:
                             messages += f"• 👤 الموظف/ة : {email['name']}\n"
                             messages += f"• ✉️ الايميل : {email['email']}\n-\n"
-        await bot.send_message(message.chat.id, messages,reply_to_message_id=message.message_id)
+        await bot.send_message(message.chat.id, messages,reply_to_message_id=message.message_id,reply_markup=markup_channel())
     except:
         pass
 
@@ -378,6 +433,7 @@ async def call2_get_info_emails(message):
 @bot.message_handler(func=lambda message:message.text=='الخطط الدراسية لجميع التخصصات 🎯',chat_types=['private'])
 async def main_plan_aou(message):
     await bot.send_message(message.chat.id,'- اختر احد الخطط الدراسية .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['plan']]))
+
 
 # get info questions aou with keyboard
 @bot.message_handler(func=lambda message:message.text=='الاسئلة الشائعه ❓',chat_types=['private'])
@@ -393,12 +449,12 @@ async def call_questions_aou(message):
             if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
                 await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_gen({'حذف':'delete_date'}))
             else:
-                await bot.send_document(message.chat.id,values,message.message_id)
+                await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_channel())
         else:
             if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
                 await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_date'}))
             else:
-                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id)
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_channel())
     except:
         pass     
 
@@ -411,19 +467,19 @@ async def call_questions_aou(message):
             if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
                 await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
             else:
-                await bot.send_document(message.chat.id,values,message.message_id)
+                await bot.send_document(message.chat.id,values,message.message_id,reply_markup=markup_channel())
         else:
             if admin.exists(f"{message.chat.id}") or message.chat.id == OWNER:
                 await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_gen({'حذف':'delete_questions'}))
             else:
-                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id)
+                await bot.send_message(message.chat.id,f"{values}",reply_to_message_id=message.message_id,reply_markup=markup_channel())
     except:
         pass     
 
 # get info plan aou with message
 @bot.message_handler(func=lambda message:message.text in [item['title'] for item in get_info_aou()['plan']],chat_types=['private'])
 async def call_plan_aou(message):
-    await bot.send_document(message.chat.id,next(item for item in get_info_aou()['plan'] if item['title'] == message.text)['file_id'],message.message_id)
+    await bot.send_document(message.chat.id,next(item for item in get_info_aou()['plan'] if item['title'] == message.text)['file_id'],message.message_id,reply_markup=markup_channel())
 
 # handler = back to menu keyboord
 @bot.message_handler(func=lambda message:message.text=='الرجوع',chat_types=['private'])
