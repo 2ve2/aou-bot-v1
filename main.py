@@ -198,10 +198,10 @@ async def broadcast(message):
                 broadcast_text = message.text.replace('/broadcast', '').strip()
             
             if not broadcast_text:
-                await antiflood(bot.reply_to, message, "يرجى اضافة رساله او الرد على رساله")
+                await bot.reply_to(message, "يرجى اضافة رساله او الرد على رساله")
                 return
             
-            processing_msg = await antiflood(bot.reply_to, message, "جاري الإرسال للمستخدمين")
+            processing_msg = await bot.reply_to(message, "جاري الإرسال للمستخدمين")
 
             success_count = 0
             fail_count = 0
@@ -230,7 +230,7 @@ async def broadcast(message):
 • فشل في الإرسال: {fail_count}
 • نسبة النجاح: {(success_count/total_users*100):.1f}%"""
 
-            await antiflood(bot.edit_message_text, report_text, processing_msg.chat.id, processing_msg.message_id)
+            await bot.edit_message_text(report_text, OWNER, processing_msg.message_id)
     except:
         pass
 
