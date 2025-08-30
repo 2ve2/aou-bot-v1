@@ -1,4 +1,6 @@
 import asyncio,aiohttp,io,json
+from bs4 import BeautifulSoup
+import pytz
 from telebot.async_telebot import AsyncTeleBot
 from telebot import *
 from telebot.util import *
@@ -10,7 +12,14 @@ req2 = Client('./db/req2.sqlite')
 
 OWNER = 5029420526
 
-bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8') # To Test
+bot = AsyncTeleBot('7404500425:AAH5As9qAJQHHU7C4gwEcCnPNa4QJko2CG8') # To Start Bot
+# bot = AsyncTeleBot('7809060058:AAGqXdWXDkLnr05gV5gXfP9xnp_dYoM2viQ') # To Test Bot
+
+events_data = {
+    'last_update': None,
+    'upcoming_events': [],
+    'last_checked': None
+}
 
 
 # markup info of bot 
@@ -54,7 +63,10 @@ def keyboard_start():
             types.KeyboardButton('الخطط الدراسية لجميع التخصصات 🎯')
         )
         keyboard.add(
-            types.KeyboardButton('الدورات والمعسكرات ( قريبا ) 🚀')
+            types.KeyboardButton('فعاليات الجامعة 🎪')
+        )
+        keyboard.add(
+            types.KeyboardButton('الدورات والمعسكرات 🚀')
         )
 
         keyboard.add(
@@ -113,8 +125,8 @@ def add_users(id_,username):
 
 # function to get info books , slides , etc
 def get_info_aou():
-        with open('./other/info.json', 'r', encoding='utf-8') as file:
-            return json.load(file)
+    with open('./other/info.json', 'r', encoding='utf-8') as file:
+        return json.load(file)
 
 # function get info from data.json
 def get_info_emails():
@@ -126,7 +138,168 @@ def get_info_users():
     with open('./other/users.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
+# function to get events from events.json
+def get_info_events():
+    try:
+        with open('./other/events.json', 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except:
+        pass
 
+# function to save events from events.json
+def save_info_events():
+    try:
+        with open('./other/events.json', 'w', encoding='utf-8') as f:
+            json.dump(events_data, f, ensure_ascii=False, indent=2)
+    except:
+        pass
+
+
+# function to get events from aou website
+def get_saudi_time():
+    saudi_tz = pytz.timezone('Asia/Riyadh')
+    return datetime.now(saudi_tz)
+
+def convert_arabic_date(arabic_date):
+    arabic_months = {
+        'يناير': '01', 'فبراير': '02', 'مارس': '03',
+        'أبريل': '04', 'مايو': '05', 'يونيو': '06',
+        'يوليو': '07', 'أغسطس': '08', 'سبتمبر': '09',
+        'أكتوبر': '10', 'نوفمبر': '11', 'ديسمبر': '12'
+    }
+    
+    try:
+        parts = arabic_date.split()
+        if len(parts) == 3:
+            day, month_ar, year = parts
+            month = arabic_months.get(month_ar, '00')
+            return f"{year}-{month}-{day.zfill(2)}"
+    except:
+        pass
+    return arabic_date
+
+def is_future_event(date_str):
+    try:
+        event_date = datetime.strptime(date_str, '%Y-%m-%d')
+        saudi_tz = pytz.timezone('Asia/Riyadh')
+        event_date = saudi_tz.localize(event_date)
+        current_time = datetime.now(saudi_tz)
+        return event_date > current_time
+    except:
+        return False
+    
+async def scrape_arabou_events():
+    url = "https://www.arabou.edu.sa/ar/media/Pages/events.aspx"
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=10) as response:
+                response.raise_for_status()
+                content = await response.text()
+        
+        soup = BeautifulSoup(content, 'html.parser')
+        events = []
+        
+        event_items = soup.find_all('div', class_='event-item')
+        
+        for item in event_items:
+            try:
+                date_div = item.find('div', class_='event-date')
+                if date_div:
+                    day = date_div.find_all('div')[0].get_text(strip=True)
+                    month = date_div.find_all('div')[1].get_text(strip=True)
+                    year = date_div.find_all('div')[2].get_text(strip=True)
+                    full_date = f"{day} {month} {year}"
+                else:
+                    full_date = "غير محدد"
+                
+                title_div = item.find('div', class_='event-title')
+                if title_div and title_div.find('a'):
+                    title = title_div.find('a').get_text(strip=True)
+                    link = title_div.find('a')['href']
+                    if not link.startswith('http'):
+                        link = f"https://www.arabou.edu.sa/ar/media/Pages/{link}"
+                else:
+                    title = "لا عنوان"
+                    link = ""
+                
+                desc_div = item.find('div', class_='event-desc')
+                description = desc_div.get_text(strip=True) if desc_div else ""
+                
+                event_date = convert_arabic_date(full_date)
+                is_upcoming = is_future_event(event_date) if event_date else False
+                
+                events.append({
+                    'title': title,
+                    'date': full_date,
+                    'formatted_date': event_date,
+                    'description': description,
+                    'link': link,
+                    'is_upcoming': is_upcoming,
+                    'day': day,
+                    'month': month,
+                    'year': year
+                })
+                
+            except:
+                continue
+        
+        return events
+        
+    except:
+        return []
+
+def cleanup_old_events():
+    current_events = events_data['upcoming_events'].copy()
+    updated_events = []
+    
+    for event in current_events:
+        if is_future_event(event['formatted_date']):
+            updated_events.append(event)
+    
+    events_data['upcoming_events'] = updated_events
+    save_info_events()
+
+async def update_events():
+    cleanup_old_events()
+    
+    events = await scrape_arabou_events()
+    if events:
+        new_upcoming_events = [event for event in events if event['is_upcoming']]
+        
+        current_titles = {event['title'] for event in events_data['upcoming_events']}
+        
+        added_count = 0
+        for new_event in new_upcoming_events:
+            if new_event['title'] not in current_titles:
+                events_data['upcoming_events'].append(new_event)
+                added_count += 1
+        
+        events_data['last_update'] = get_saudi_time().strftime('%Y-%m-%d %H:%M:%S')
+        events_data['last_checked'] = get_saudi_time().strftime('%Y-%m-%d %H:%M:%S')
+        
+        save_info_events()
+
+def check_for_updates():
+    events_data['last_checked'] = get_saudi_time().strftime('%Y-%m-%d %H:%M:%S')
+    save_info_events()
+
+async def schedule_daily_tasks():
+    while True:
+        now = get_saudi_time()
+        
+        if now.hour == 8 and now.minute == 0:
+            await update_events()
+            await asyncio.sleep(60) 
+        
+        elif now.hour == 12 and now.minute == 0:
+            check_for_updates()
+            await asyncio.sleep(60)
+        
+        await asyncio.sleep(30)
 
 # markup start
 def markup_start(chat_id,username):
@@ -186,6 +359,19 @@ async def delete_admin(message):
     if message.chat.id == OWNER:
         await bot.send_document(message.chat.id,open('./other/users.json','r',encoding='utf-8'),caption=f"- عدد المستخدمين : {len(get_info_users()['users'])}")
         await bot.send_document(message.chat.id,open('./other/info.json','r',encoding='utf-8'),caption=f"- عدد الكتب : {len(get_info_aou()['books'])}\n- عدد السلايدات : {len(get_info_aou()['slides'])}\n- عدد الاسئله الشائعه : {len(get_info_aou()['questions'])}")
+
+# send message to channel
+# @bot.message_handler(commands=['channel'],chat_types=['private'])
+# async def broadcast_to_channel(message):
+#     if message.chat.id == OWNER:
+#         if message.reply_to_message:
+#             broadcast_text = message.reply_to_message.text
+#         else:
+#             broadcast_text = message.text.replace('/channel', '').strip()
+        
+#         if not broadcast_text:
+#             await bot.reply_to(message, "يرجى اضافة رساله او الرد على رساله")
+#             return
 
 # send message to users
 @bot.message_handler(commands=['broadcast'],chat_types=['private'])
@@ -420,7 +606,7 @@ async def call2_get_info_emails(message):
                 for department in branch["departments"]:
                     if department["department_name"] == str(message.text):
                         messages+=f"🏢 قسم {department['department_name']}\n\n"
-                        # messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
+                        messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
                         for email in department["emails"]:
                             messages += f"• 👤 الموظف/ة : {email['name']}\n"
                             messages += f"• ✉️ الايميل : {email['email']}\n-\n"
@@ -433,6 +619,27 @@ async def call2_get_info_emails(message):
 async def main_plan_aou(message):
     await bot.send_message(message.chat.id,'- اختر احد الخطط الدراسية .',reply_to_message_id=message.message_id,reply_markup=keyboard_gen([item['title'] for item in get_info_aou()['plan']]))
 
+# get info of courses
+@bot.message_handler(func=lambda message:message.text=='الدورات والمعسكرات 🚀',chat_types=['private'])
+async def main_courses_aou(message):
+    await bot.send_message(message.chat.id, 'سيتم اضافة المحتوى قريبا ...',reply_to_message_id=message.message_id)
+# get info of events
+@bot.message_handler(func=lambda message:message.text=='فعاليات الجامعة 🎪',chat_types=['private'])
+async def main_events_aou(message):
+    
+    if not events_data['upcoming_events']:
+        await bot.send_message(message.chat.id, "لا توجد فعاليات حاليا 😞",reply_to_message_id=message.message_id)
+        return
+    events_text = "🎪 الفعاليات القادمة بالجامعة\n\n"
+    
+    for i, event in enumerate(events_data['upcoming_events'], 1):
+        events_text += f"- فعالية : {event['title']}\n"
+        events_text += f"• 📅 التاريخ : {event['date']}\n"
+        if event['description']:
+            events_text += f"• 📝 الوصف : {event['description']}\n"
+        events_text += f"• 🔗 الرابط : [اضغط هنا]({event['link']})\n-\n"
+        
+    await bot.send_message(message.chat.id, events_text, parse_mode='Markdown',disable_web_page_preview=True)
 
 # get info questions aou with keyboard
 @bot.message_handler(func=lambda message:message.text=='الاسئلة الشائعه ❓',chat_types=['private'])
@@ -598,10 +805,19 @@ async def default_query(inline_query):
         pass
 
 
-if __name__=="__main__":
+async def main():
+    get_info_events()
+    if not events_data['upcoming_events'] or not events_data['last_update']:
+        await update_events()
+
+    asyncio.create_task(schedule_daily_tasks())
     while True:
         try:
-            print('Running ...')
-            asyncio.run(bot.polling(True))
+            print('Running bot polling...')
+            await bot.infinity_polling()
         except Exception as e:
-            print(f'- Error {e}')
+            print(f'Error: {e}')
+            await asyncio.sleep(5)
+
+if __name__ == "__main__":
+    asyncio.run(main())
