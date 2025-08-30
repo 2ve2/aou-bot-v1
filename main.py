@@ -606,7 +606,7 @@ async def call2_get_info_emails(message):
                 for department in branch["departments"]:
                     if department["department_name"] == str(message.text):
                         messages+=f"🏢 قسم {department['department_name']}\n\n"
-                        messages+=f"🔍 وظيفة القسم :\n{"".join(department['info'])}\n"
+                        messages+=f"🔍 وظيفة القسم :\n{''.join(department['info'])}\n"
                         for email in department["emails"]:
                             messages += f"• 👤 الموظف/ة : {email['name']}\n"
                             messages += f"• ✉️ الايميل : {email['email']}\n-\n"
